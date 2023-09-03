@@ -17,15 +17,8 @@ from langchain.chat_models import ChatOpenAI
 import pinecone
 import numpy as np
 from langchain.vectorstores import Pinecone
-from langchain.agents import initialize_agent
-from langchain.chains.question_answering import load_qa_chain
-from langchain.prompts import PromptTemplate
-
-
-os.environ["OPENAI_API_KEY"]="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"
 
 load_dotenv()
-pinecone.init(api_key="3f5eeaa8-01f6-4355-a8e6-22153c4242d4", environment="us-west1-gcp-free")
 
 index_name = 'chattypdf'
 
@@ -84,35 +77,6 @@ def main():
         )
 
         llm = ChatOpenAI(temperature=0,model_name="gpt-3.5-turbo-16k")
-
-        # # # message_history = RedisChatMessageHistory(
-        # # # url="redis://default:zyRNg3pQk44tfbpw4fQauy1lsuacbDdA@redis-19775.c10.us-east-1-4.ec2.cloud.redislabs.com:19775", ttl=600, session_id=get_script_run_ctx().session_id
-        # # # )
-
-        # memory = ConversationBufferWindowMemory(k=5,
-        #     memory_key="chat_history", return_messages=True
-        # )
-
-        # ruff = RetrievalQA.from_chain_type(
-        # llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever(),memory=memory)
-        
-        # tools = [
-        # Tool(
-        # name="PDF System",
-        # func=ruff.run,
-        # description="use this tool when answering queries to get more information about the topic",
-        # ),]
-
-
-        # agent = initialize_agent(
-        #     agent='chat-conversational-react-description',
-        #     tools=tools,
-        #     llm=llm,
-        #     verbose=True,
-        #     max_iterations=3,
-        #     early_stopping_method='generate',
-        #     memory=memory
-        #     )
         
         ruff = RetrievalQA.from_chain_type(
                 llm=llm, chain_type="stuff", retriever=vectorstore.as_retriever())
@@ -139,7 +103,7 @@ def main():
         )
 
         message_history = RedisChatMessageHistory(
-        url="redis://default:zyRNg3pQk44tfbpw4fQauy1lsuacbDdA@redis-19775.c10.us-east-1-4.ec2.cloud.redislabs.com:19775", ttl=600, session_id="user"
+        url="redis://default:zyRNg3pQk44tfbpw4fQauy1lsuacbDdA@redis-19775.c10.us-east-1-4.ec2.cloud.redislabs.com:19775", ttl=600, session_id=get_script_run_ctx.session_id
         )
 
         memory = ConversationBufferWindowMemory(k=5,
